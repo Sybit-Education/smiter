@@ -2,12 +2,14 @@
   <a-layout>
 
     <a-layout-header>
-      <h1>Image Merger</h1>
+      <h1>SMITER - Social Media Image Templater</h1>
     </a-layout-header>
 
     <a-layout-content>
+      <template-selector @selected="templateChanged"/>
 
       <a-upload
+        v-if="templateImg"
         id="img"
         name="img"
         accept="image/*"
@@ -26,7 +28,9 @@
         <img
           class="result"
           ref="result"
-          @mousemove="move" />
+          @mousemove="move"
+          crossorigin="anonymous"
+        />
         <manipulation-control
           @moveLeft="moveLeft"
           @moveRight="moveRight"
@@ -52,13 +56,14 @@ import scaleImage from '@/plugins/image-resizer'
 import { UploadOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import ManipulationControl from '@/components/ManipulationControl'
+import TemplateSelector from './components/TemplateSelector.vue'
 
 export default {
   name: 'App',
   data () {
     return {
-      x: null,
-      y: null,
+      x: 0,
+      y: 0,
       zoom: 1.0,
       factor: 100,
       original: {
@@ -76,11 +81,9 @@ export default {
     }
   },
   components: {
-    ManipulationControl, UploadOutlined
+    ManipulationControl, UploadOutlined, TemplateSelector
   },
   created () {
-    this.templateImg = 'template/Postingvorlage-SM.png'
-
     this.handleChange = (info) => {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
@@ -101,7 +104,8 @@ export default {
         ]
         mergeImages(toMerge, {
             width: this.templateWidth,
-            height: this.templateHeight
+            height: this.templateHeight,
+            crossOrigin: "Anonymous"
           })
           .then(b64 => {
             this.$refs['result'].src = b64
@@ -197,6 +201,9 @@ export default {
       a.href = this.$refs['result'].src //Image Base64 Goes here
       a.download = "smiter.png"; //File name Here
       a.click(); //Downloaded file
+    },
+    templateChanged(template) {
+      this.templateImg = template.image.url
     }
   },
   watch: {
@@ -220,7 +227,6 @@ export default {
       if (newImg !== null && newImg !== oldImg) {
         const image = new Image()
         image.onload = () => {
-          console.log(`the image dimensions are ${image.width}x${image.height}`);
           this.templateWidth = image.width
           this.templateHeight = image.height
         }
@@ -235,6 +241,9 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  color: whitesmoke;
+}
 .result {
   width: 100vw;
   border-width: 1px;
