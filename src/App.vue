@@ -1,80 +1,127 @@
 <template>
-  <div>
-    <h2>Image Merger</h2>
-    <div>
-        <div>
-            <label for="img">Choose an image:</label>
-            <input type="file" id="img" name="img" accept="image/*" @change="readURL" />
-        </div>
-    </div>
+  <a-layout>
 
-    <div v-if="resizedImg">
-      <img ref="result" @mousemove="move" />
-      <button @click="download">Downloads</button>
-      <table>
-        <tr>
-          <td> </td><td><button @click="moveUp">⬆️</button></td><td> <button @click="zoomIn">➕</button> </td>
-        </tr>
-        <tr>
-          <td><button @click="moveLeft">⬅️</button></td><td></td><td><button @click="moveRight">➡️</button></td>
-        </tr>
-        <tr><td></td><td><button @click="moveDown">⬇️</button></td><td> <button @click="zoomOut">➖</button>  </td></tr>
-      </table>
-    </div>
-  </div>
+    <a-layout-header>
+      <h1>Image Merger</h1>
+    </a-layout-header>
+
+    <a-layout-content>
+
+      <a-upload
+        id="img"
+        name="img"
+        accept="image/*"
+        :show-upload-list="false"
+        :maxCount="1"
+        :before-upload="readImg"
+        @remove="removeImg"
+      >
+        <a-button>
+          <upload-outlined />
+          Bild auswählen
+        </a-button>
+      </a-upload>
+
+      <div v-if="resizedImg">
+        <img
+          class="result"
+          ref="result"
+          @mousemove="move" />
+        <manipulation-control
+          @moveLeft="moveLeft"
+          @moveRight="moveRight"
+          @moveUp="moveUp"
+          @moveDown="moveDown"
+          @zoomIn="zoomIn"
+          @zoomOut="zoomOut"
+        />
+        <button @click="download">Downloads</button>
+      </div>
+    </a-layout-content>
+
+    <a-layout-footer>
+      &copy; 2022 Sybit GmbH
+    </a-layout-footer>
+  </a-layout>
 
 </template>
 
 <script>
 import mergeImages from 'merge-images'
 import scaleImage from '@/plugins/image-resizer'
+import { UploadOutlined } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
+import ManipulationControl from '@/components/ManipulationControl'
 
 export default {
   name: 'App',
   data () {
     return {
-      x: 0,
-      y: 0,
+      x: null,
+      y: null,
+      zoom: 1.0,
       factor: 100,
-      originalImg: null,
-      originalWidth: 0,
-      originalHeight: 0,
+      original: {
+        img: null,
+        width: 0,
+        height: 0
+      },
       resizedImg: null,
+      resizedWidth:0,
+      resizedHeight: 0,
       templateImg: null,
       templateWidth: 0,
-      templateHeight:0
+      templateHeight:0,
+      handleChange: null
     }
+  },
+  components: {
+    ManipulationControl, UploadOutlined
   },
   created () {
     this.templateImg = 'template/Postingvorlage-SM.png'
+
+    this.handleChange = (info) => {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    };
   },
   methods: {
     merge () {
       if(this.resizedImg) {
         const toMerge = [
           {src: this.resizedImg, x: this.x, y: this.y},
-          {src: this.templateImg, x: 0, y: 0}
+          {src: this.templateImg, x: 0, y: 0},
         ]
-        mergeImages(toMerge)
-          .then(b64 => this.$refs['result'].src = b64)
+        mergeImages(toMerge, {
+            width: this.templateWidth,
+            height: this.templateHeight
+          })
+          .then(b64 => {
+            this.$refs['result'].src = b64
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       }
     },
     moveUp () {
       this.y = this.y - this.factor
-      console.log('y:', this.y)
     },
     moveDown () {
       this.y = this.y + this.factor
-      console.log('y:', this.y)
-
     },
     moveLeft () {
       this.x = this.x - this.factor
-      console.log('x:', this.x)
     },
     moveRight () {
       this.x = this.x + this.factor
-      console.log('x:', this.x)
     },
     move(evt) {
       if (evt.buttons > 0 &&  evt.movementX > 0 &&  evt.movement > 0) {
@@ -83,8 +130,23 @@ export default {
         console.log('x:', this.x, 'y:', this.y)
       }
     },
+    zoomFit () {
+      if (this.original.width >= this.original.height) {
+        this.zoom = this.templateWidth / this.original.width
+      } else {
+        this.zoom = this.templateHeight / this.original.height
+      }
+      scaleImage(this.original.img, {width: this.templateWidth, height: this.templateHeight })
+        .then((resizedImage) => {
+          this.resizedImg = resizedImage
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    },
     zoomIn () {
-      scaleImage(this.originalImg, {width: this.originalWidth * .8, height: this.originalHeight * 0.8})
+      this.zoom += 0.1
+      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
           .then((resizedImage) => {
             this.resizedImg = resizedImage
           })
@@ -93,7 +155,8 @@ export default {
           })
     },
     zoomOut() {
-      scaleImage(this.originalImg, {width: this.originalWidth * .5, height: this.originalHeight * 0.5})
+      this.zoom -= 0.1
+      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
           .then((resizedImage) => {
             this.resizedImg = resizedImage
           })
@@ -101,24 +164,27 @@ export default {
             console.error(err)
           })
     },
-    readURL(evt) {
+    readImg(evt) {
       var reader = new FileReader()
-      reader.readAsDataURL(evt.target.files[0])
+      reader.onerror = (err) => {
+        console.error(err)
+        return
+      }
       reader.onload = () => {
-        this.originalImg = reader.result
-        this.getNaturalSize(this.originalImg).then(size => {
-          this.originalWidth = size.width
-          this.originalHeight = size.height
-        })
-        scaleImage(this.originalImg, {width: this.templateWidth, height: this.templateHeight })
-          .then((resizedImage) => {
-            this.resizedImg = resizedImage
-
-          })
-          .catch((err) => {
-            console.error(err)
+        this.original.img = reader.result
+        this.getNaturalSize(this.original.img)
+          .then(size => {
+            this.original.width = size.width
+            this.original.height = size.height
+            this.zoomFit()
           })
       }
+      reader.readAsDataURL(evt)
+      return false // prevent upload action
+    },
+    removeImg () {
+      this.original.img = null
+      this.resized.img = null
     },
     async getNaturalSize(image) {
       const img = new Image()
@@ -144,14 +210,14 @@ export default {
         this.merge()
       }
     },
-    resizedImg(newFile, oldFile) {
-      if(newFile != null && newFile !== oldFile) {
+    resizedImg(newImg, oldImg) {
+      if(newImg != null && newImg !== oldImg) {
         this.merge()
       }
     },
     templateImg(newImg, oldImg) {
-      console.log('templateImg', newImg, oldImg)
-      if(newImg !== null && newImg !== oldImg) {
+
+      if (newImg !== null && newImg !== oldImg) {
         const image = new Image()
         image.onload = () => {
           console.log(`the image dimensions are ${image.width}x${image.height}`);
@@ -159,8 +225,20 @@ export default {
           this.templateHeight = image.height
         }
         image.src = this.templateImg
+      } else {
+        this.templateWidth = 0
+        this.templateHeight = 0
       }
     }
   }
 }
 </script>
+
+<style scoped>
+.result {
+  width: 100vw;
+  border-width: 1px;
+  border-color: gray;
+  border-style: solid;
+}
+</style>
