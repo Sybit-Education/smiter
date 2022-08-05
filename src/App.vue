@@ -64,12 +64,7 @@
     </a-layout-content>
 
     <a-layout-footer>
-      <div>Developed with 💜 for you!</div>
-      <a-space>
-        <span>&copy; 2022 Sybit GmbH</span> |
-        <a href="https://www.sybit.de/impressum">Impressum</a> |
-        <a href="https://www.sybit.de/datenschutz">Datenschutz</a>
-      </a-space>
+      <footer-bar />
     </a-layout-footer>
   </a-layout>
 
@@ -82,6 +77,7 @@ import { UploadOutlined, DownloadOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import ManipulationControl from '@/components/ManipulationControl'
 import TemplateSelector from './components/TemplateSelector.vue'
+import FooterBar from './components/FooterBar.vue'
 
 export default {
   name: 'App',
@@ -106,7 +102,8 @@ export default {
     }
   },
   components: {
-    ManipulationControl, UploadOutlined, DownloadOutlined, TemplateSelector
+    ManipulationControl, UploadOutlined, DownloadOutlined, TemplateSelector,
+    FooterBar
   },
   created () {
     this.handleChange = (info) => {
