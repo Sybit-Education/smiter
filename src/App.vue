@@ -7,22 +7,27 @@
 
     <a-layout-content>
       <template-selector @selected="templateChanged"/>
-
-      <a-upload
-        v-if="templateImg"
-        id="img"
-        name="img"
-        accept="image/*"
-        :show-upload-list="false"
-        :maxCount="1"
-        :before-upload="readImg"
-        @remove="removeImg"
-      >
-        <a-button>
-          <upload-outlined />
-          Bild auswählen
-        </a-button>
-      </a-upload>
+      <div class="center">
+        <a-upload
+          v-if="templateImg"
+          id="img"
+          name="img"
+          accept="image/*"
+          :show-upload-list="false"
+          :maxCount="1"
+          :before-upload="readImg"
+          @remove="removeImg"
+        >
+          <a-button
+            type="primary"
+            size="large"
+            class="upload-button"
+          >
+            <upload-outlined />
+            Dein Foto auswählen
+          </a-button>
+        </a-upload>
+      </div>
 
       <div v-if="resizedImg">
         <img
@@ -31,15 +36,29 @@
           @mousemove="move"
           crossorigin="anonymous"
         />
-        <manipulation-control
-          @moveLeft="moveLeft"
-          @moveRight="moveRight"
-          @moveUp="moveUp"
-          @moveDown="moveDown"
-          @zoomIn="zoomIn"
-          @zoomOut="zoomOut"
-        />
-        <button @click="download">Downloads</button>
+        <a-row class="center">
+          <a-col cols="12">
+            <manipulation-control
+              @moveLeft="moveLeft"
+              @moveRight="moveRight"
+              @moveUp="moveUp"
+              @moveDown="moveDown"
+              @zoomIn="zoomIn"
+              @zoomOut="zoomOut"
+            />
+          </a-col>
+          <a-col cols="12">
+            <a-button
+              @click="download"
+              type="primary"
+              size="large"
+            >
+              <download-outlined />
+              Download
+            </a-button>
+          </a-col>
+
+        </a-row>
       </div>
     </a-layout-content>
 
@@ -53,7 +72,7 @@
 <script>
 import mergeImages from 'merge-images'
 import scaleImage from '@/plugins/image-resizer'
-import { UploadOutlined } from '@ant-design/icons-vue'
+import { UploadOutlined, DownloadOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import ManipulationControl from '@/components/ManipulationControl'
 import TemplateSelector from './components/TemplateSelector.vue'
@@ -81,7 +100,7 @@ export default {
     }
   },
   components: {
-    ManipulationControl, UploadOutlined, TemplateSelector
+    ManipulationControl, UploadOutlined, DownloadOutlined, TemplateSelector
   },
   created () {
     this.handleChange = (info) => {
@@ -244,10 +263,23 @@ export default {
 h1 {
   color: whitesmoke;
 }
+.ant-layout-content {
+  min-height: calc(100vh - 9rem);
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.upload-button {
+  margin: 0.5rem;
+
+}
 .result {
   width: 100vw;
   border-width: 1px;
   border-color: gray;
   border-style: solid;
+  background: url('@/assets/img/transparent.jpg') repeat;
 }
 </style>

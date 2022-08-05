@@ -6,7 +6,11 @@
       :xs="12"
       :key="item.id"
     >
-      <a-card hoverable @click="selected(item)">
+      <a-card
+        class="template-item"
+        hoverable
+        @click="selected(item)"
+      >
         <template #cover>
             <img
             class="template-preview"
@@ -45,7 +49,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.template-item {
+  margin: 0.25rem;
+}
 .template-preview {
   background: url('@/assets/img/transparent.jpg') repeat;
 }

@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <table>
+    <table class="manipulation-control">
       <tr>
         <td class="north-west"> </td>
         <td class="north"><button @click="moveUp" class="moveUp">⬆️</button></td>
@@ -24,7 +23,6 @@
         <td class="south-east">  </td>
       </tr>
     </table>
-  </div>
 </template>
 
 <script>
@@ -54,6 +52,10 @@ export default {
 </script>
 
 <style scoped>
+
+.manipulation-control {
+  margin: 0.25rem;
+}
 .north-west {
     width: 3rem;
     border-top-left-radius: 6rem;
