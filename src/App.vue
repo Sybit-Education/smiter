@@ -13,7 +13,7 @@
           id="img"
           name="img"
           accept="image/*"
-          :capture="false"
+          capture="none"
           :show-upload-list="false"
           :maxCount="1"
           :before-upload="readImg"
