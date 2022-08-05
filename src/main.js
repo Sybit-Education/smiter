@@ -6,7 +6,7 @@ import 'ant-design-vue/dist/antd.css'
 
 
 import panZoom from 'vue-panzoom'
-
+import './registerServiceWorker'
 
 const app = createApp(App)
 app.use(Antd)
