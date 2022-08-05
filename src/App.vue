@@ -13,6 +13,7 @@
           id="img"
           name="img"
           accept="image/*"
+          :capture="false"
           :show-upload-list="false"
           :maxCount="1"
           :before-upload="readImg"
@@ -63,7 +64,9 @@
     </a-layout-content>
 
     <a-layout-footer>
-      &copy; 2022 Sybit GmbH
+      &copy; 2022 Sybit GmbH |
+      <a href="https://www.sybit.de/impressum">Impressum</a> |
+      <a href="https://www.sybit.de/datenschutz">Datenschutz</a>
     </a-layout-footer>
   </a-layout>
 
@@ -162,13 +165,18 @@ export default {
       scaleImage(this.original.img, {width: this.templateWidth, height: this.templateHeight })
         .then((resizedImage) => {
           this.resizedImg = resizedImage
+          this.getNaturalSize(resizedImage)
+            .then(size => {
+              this.resizedWidth = size.width
+              this.resizedHeight = size.height
+            })
         })
         .catch((err) => {
           console.error(err)
         })
     },
     zoomIn () {
-      this.zoom += 0.1
+      this.zoom *= 1.1
       scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
           .then((resizedImage) => {
             this.resizedImg = resizedImage
@@ -178,7 +186,7 @@ export default {
           })
     },
     zoomOut() {
-      this.zoom -= 0.1
+      this.zoom /= 1.1
       scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
           .then((resizedImage) => {
             this.resizedImg = resizedImage
