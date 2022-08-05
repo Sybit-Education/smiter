@@ -232,7 +232,8 @@ export default {
     templateChanged(template) {
       this.templateImg = template.image.url
       this.$nextTick(() => {
-        this.$refs['uploadInput'].$el.removeAttribute('capture')  //TODO tweak
+        console.log('remove capture', document.getElementById("img"))
+        document.getElementById("img").removeAttribute('capture')  //TODO tweak
       })
     }
   },
