@@ -9,10 +9,11 @@
       <template-selector @selected="templateChanged"/>
       <div class="center">
         <a-upload
+          ref="uploadInput"
           v-if="templateImg"
           id="img"
           name="img"
-          accept="image/png;image/jpg"
+          accept="image/*"
           :show-upload-list="false"
           :maxCount="1"
           :before-upload="readImg"
@@ -230,6 +231,9 @@ export default {
     },
     templateChanged(template) {
       this.templateImg = template.image.url
+      this.$nextTick(() => {
+        this.$refs['uploadInput'].$el.removeAttribute('capture')  //TODO tweak
+      })
     }
   },
   watch: {
