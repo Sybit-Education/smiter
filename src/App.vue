@@ -12,7 +12,7 @@
           v-if="templateImg"
           id="img"
           name="img"
-          accept="image/*"
+          accept="image/*;capture=filesystem"
           capture="filesystem"
           :show-upload-list="false"
           :maxCount="1"
