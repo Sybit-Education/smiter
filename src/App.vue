@@ -133,7 +133,7 @@ export default {
             this.$refs['result'].src = b64
           })
           .catch((err) => {
-            message.error(err)
+            message.error(err.message)
           })
       }
     },
@@ -172,7 +172,7 @@ export default {
             })
         })
         .catch((err) => {
-          message.error(err)
+          message.error(err.message)
         })
     },
     zoomIn () {
@@ -182,7 +182,7 @@ export default {
             this.resizedImg = resizedImage
           })
           .catch((err) => {
-            message.error(err)
+            message.error(err.message)
           })
     },
     zoomOut() {
@@ -192,13 +192,13 @@ export default {
             this.resizedImg = resizedImage
           })
           .catch((err) => {
-            message.error(err)
+            message.error(err.message)
           })
     },
     readImg(evt) {
       var reader = new FileReader()
       reader.onerror = (err) => {
-        message.error(err)
+        message.error(err.message)
         return
       }
       reader.onload = () => {
