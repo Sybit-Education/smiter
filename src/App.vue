@@ -76,8 +76,8 @@ import scaleImage from '@/plugins/image-resizer'
 import { UploadOutlined, DownloadOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import ManipulationControl from '@/components/ManipulationControl'
-import TemplateSelector from './components/TemplateSelector.vue'
-import FooterBar from './components/FooterBar.vue'
+import TemplateSelector from '@/components/TemplateSelector.vue'
+import FooterBar from '@/components/FooterBar.vue'
 
 export default {
   name: 'App',

@@ -8,7 +8,9 @@
  */
 export default async function scaleImage(imageContent, dimensions) {
     // ensure the file is an image
-    if (!imageContent.match(/image.*/)) return null
+    if (!imageContent.match(/image.*/)) {
+      throw "Not Image content!"
+    }
 
     const image = new Image()
     image.src = imageContent
