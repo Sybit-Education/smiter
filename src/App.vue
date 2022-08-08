@@ -133,7 +133,7 @@ export default {
             this.$refs['result'].src = b64
           })
           .catch((err) => {
-            console.error(err)
+            message.error(err)
           })
       }
     },
@@ -153,7 +153,7 @@ export default {
       if (evt.buttons > 0 &&  evt.movementX > 0 &&  evt.movement > 0) {
         this.x += evt.movementX
         this.y += evt.movementY
-        console.log('x:', this.x, 'y:', this.y)
+        console.log('move: x:', this.x, 'y:', this.y)
       }
     },
     zoomFit () {
@@ -172,7 +172,7 @@ export default {
             })
         })
         .catch((err) => {
-          console.error(err)
+          message.error(err)
         })
     },
     zoomIn () {
@@ -182,7 +182,7 @@ export default {
             this.resizedImg = resizedImage
           })
           .catch((err) => {
-            console.error(err)
+            message.error(err)
           })
     },
     zoomOut() {
@@ -192,13 +192,13 @@ export default {
             this.resizedImg = resizedImage
           })
           .catch((err) => {
-            console.error(err)
+            message.error(err)
           })
     },
     readImg(evt) {
       var reader = new FileReader()
       reader.onerror = (err) => {
-        console.error(err)
+        message.error(err)
         return
       }
       reader.onload = () => {
@@ -232,7 +232,6 @@ export default {
     templateChanged(template) {
       this.templateImg = template.image.url
       this.$nextTick(() => {
-        console.log('remove capture', document.getElementById("img"))
         document.getElementById("img").removeAttribute('capture')  //TODO tweak
       })
     }
