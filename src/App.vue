@@ -7,6 +7,7 @@
 
     <a-layout-content>
       <template-selector @selected="templateChanged"/>
+
       <div class="center">
         <a-upload
           ref="uploadInput"
@@ -28,9 +29,12 @@
             Dein Foto auswählen
           </a-button>
         </a-upload>
-      </div>
 
+
+      </div>
+      <img ref="photo" v-if="original.img" style="width:200px;"/>
       <div v-if="resizedImg">
+
         <img
           class="result"
           ref="result"
@@ -209,6 +213,9 @@ export default {
             this.original.height = size.height
             this.zoomFit()
           })
+        this.$nextTick(() => {
+          this.$refs['photo'].src = this.original.img
+        })
       }
       reader.readAsDataURL(evt)
       return false // prevent upload action
