@@ -32,7 +32,7 @@
 
 
       </div>
-      <img ref="photo" v-if="original.img" style="width:200px;"/>
+      <img ref="photo"/>
       <div v-if="resizedImg">
 
         <img
@@ -160,7 +160,7 @@ export default {
         console.log('move: x:', this.x, 'y:', this.y)
       }
     },
-    zoomFit () {
+    async zoomFit () {
       if (this.original.width >= this.original.height) {
         this.zoom = this.templateWidth / this.original.width
       } else {
@@ -174,6 +174,8 @@ export default {
               this.resizedWidth = size.width
               this.resizedHeight = size.height
             })
+          this.$refs['photo'].src = this.resizedImg
+          return this.resizedImg
         })
         .catch((err) => {
           message.error(err.message)
@@ -207,15 +209,11 @@ export default {
       }
       reader.onload = () => {
         this.original.img = reader.result
-        this.getNaturalSize(this.original.img)
-          .then(size => {
-            this.original.width = size.width
-            this.original.height = size.height
-            this.zoomFit()
-          })
-        this.$nextTick(() => {
-          this.$refs['photo'].src = this.original.img
-        })
+        const size = this.getNaturalSize(this.original.img)
+
+        this.original.width = size.width
+        this.original.height = size.height
+        this.zoomFit()
       }
       reader.readAsDataURL(evt)
       return false // prevent upload action

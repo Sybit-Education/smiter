@@ -7,38 +7,29 @@
  * @returns {Promise<Blob | null>} Promise resolving to a scale image or a null if provided an invalid file type
  */
 export default async function scaleImage(imageContent, dimensions) {
-    // ensure the file is an image
-    if (!imageContent.match(/image.*/)) {
-      throw "Not Image content!"
-    }
+  // ensure the file is an image
+  if (!imageContent.match(/image.*/)) {
+    throw "No Image content!"
+  }
 
-    const image = new Image()
-    image.src = imageContent
+  const image = new Image()
+  await new Promise((resolve) => resolve(image.onload))
+  image.src = imageContent
 
-    await new Promise((resolve) => resolve(image.onload))
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d", {alpha: true});
+  const canvas = document.createElement("canvas")
+  canvas.width = dimensions.width
+  canvas.height = dimensions.height
+  const context = canvas.getContext("2d", {alpha: true})
 
-    canvas.width = dimensions.width;
-    canvas.height = dimensions.height;
+  if (image.height <= image.width) {
+    const scaleProportions = canvas.height / image.height
+    const scaledWidth = scaleProportions * image.width
+    context.drawImage(image, (canvas.width - scaledWidth)/2, 0, scaledWidth, canvas.height)
+  } else {
+    const scaleProportions = canvas.width / image.width
+    const scaledHeight = scaleProportions * image.height
+    context.drawImage(image, 0, (canvas.height - scaledHeight)/2, canvas.width, scaledHeight)
+  }
 
-    if (image.height <= image.width) {
-        const scaleProportions = canvas.height / image.height;
-        const scaledWidth = scaleProportions * image.width;
-        context.drawImage(image, (canvas.width - scaledWidth)/2, 0, scaledWidth, canvas.height);
-    }
-    else {
-        const scaleProportions = canvas.width / image.width;
-        const scaledHeight = scaleProportions * image.height;
-        context.drawImage(image, 0, (canvas.height - scaledHeight)/2, canvas.width, scaledHeight);
-    }
-
-    const blob = await new Promise((res) => canvas.toBlob(res))
-    const reader = new FileReader()
-    reader.readAsDataURL(blob)
-    return new Promise(resolve => {
-      reader.onloadend = () => {
-        resolve(reader.result)
-      }
-    })
+  return canvas.toDataURL()
 }
