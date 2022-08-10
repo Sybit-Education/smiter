@@ -31,5 +31,5 @@ export default async function scaleImage(imageContent, dimensions) {
     context.drawImage(image, 0, (canvas.height - scaledHeight)/2, canvas.width, scaledHeight)
   }
 
-  return canvas.toDataURL()
+  return canvas.toDataURL('image/png')
 }

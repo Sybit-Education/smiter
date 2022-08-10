@@ -209,11 +209,11 @@ export default {
       }
       reader.onload = () => {
         this.original.img = reader.result
-        const size = this.getNaturalSize(this.original.img)
-
-        this.original.width = size.width
-        this.original.height = size.height
-        this.zoomFit()
+        this.getNaturalSize(this.original.img).then(size =>{
+          this.original.width = size.width
+          this.original.height = size.height
+          this.zoomFit()
+        })
       }
       reader.readAsDataURL(evt)
       return false // prevent upload action
