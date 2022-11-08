@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
-    "airtable": "^0.11.4",
+    "airtable": "^0.11.5",
     "ant-design-vue": "^3.2.10",
     "core-js": "^3.8.3",
     "merge-images": "^2.0.0",
