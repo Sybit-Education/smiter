@@ -15,7 +15,7 @@
     "merge-images": "^2.0.0",
     "register-service-worker": "^1.7.2",
     "sass": "^1.54.3",
-    "sass-loader": "^13.0.2",
+    "sass-loader": "^13.1.0",
     "vue": "^3.2.13",
     "vue-panzoom": "^1.1.6"
   },
