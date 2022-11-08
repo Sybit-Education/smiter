@@ -31,3 +31,11 @@ yarn lint
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Database
+
+The template Images are stored on Airtable. The corresponding API-Keys are set during Deployment at `.env` file.
+
+## Deployment
+
+The App is automatically deployed if branch `main` is updated on Netlify: https://smiter.netlify.app/
