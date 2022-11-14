@@ -11,7 +11,7 @@
     "@mdi/font": "5.9.55",
     "airtable": "^0.11.5",
     "ant-design-vue": "^3.2.10",
-    "core-js": "^3.26.0",
+    "core-js": "^3.26.1",
     "merge-images": "^2.0.0",
     "register-service-worker": "^1.7.2",
     "sass": "^1.54.3",
