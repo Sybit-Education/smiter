@@ -6,7 +6,7 @@
  * @param dimensions {{width: number, height: number}} Dimenstions of the output image
  * @returns {Promise<Blob | null>} Promise resolving to a scale image or a null if provided an invalid file type
  */
-export default async function scaleImage(imageContent, dimensions, source) {
+export default async function scaleImage(imageContent, dimensions) {
   // ensure the file is an image
   if (!imageContent.match(/image.*/)) {
     throw "No Image content!"
@@ -20,7 +20,7 @@ export default async function scaleImage(imageContent, dimensions, source) {
       const context = canvas.getContext("2d", {alpha: true})
 
       if (image.height <= image.width) {
-        const scaleProportions = canvas.height / source.height
+        const scaleProportions = canvas.height / image.height
         const scaledWidth = scaleProportions * image.width
         context.drawImage(image, (canvas.width - scaledWidth)/2, 0, scaledWidth, canvas.height)
       } else {

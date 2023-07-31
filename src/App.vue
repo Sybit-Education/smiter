@@ -167,7 +167,7 @@ export default {
         this.zoom = this.templateHeight / this.original.height
       }
       console.log('zoom: ', this.zoom)
-      scaleImage(this.original.img, {width: this.templateWidth, height: this.templateHeight}, {width: this.templateWidth, height: this.templateHeight})
+      scaleImage(this.original.img, {width: this.templateWidth, height: this.templateHeight})
         .then((resizedImage) => {
           this.resizedImg = resizedImage
           this.getNaturalSize(resizedImage)
@@ -184,7 +184,7 @@ export default {
     },
     zoomIn () {
       this.zoom *= 1.1
-      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom}, {width: this.templateWidth, height: this.templateHeight})
+      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
           .then((resizedImage) => {
             this.resizedImg = resizedImage
           })
@@ -194,7 +194,7 @@ export default {
     },
     zoomOut() {
       this.zoom /= 1.1
-      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom}, {width: this.templateWidth, height: this.templateHeight})
+      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom} )
           .then((resizedImage) => {
             this.resizedImg = resizedImage
           })
