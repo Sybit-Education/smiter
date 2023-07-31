@@ -166,7 +166,8 @@ export default {
       } else {
         this.zoom = this.templateHeight / this.original.height
       }
-      scaleImage(this.original.img, {width: this.templateWidth, height: this.templateHeight })
+      console.log('zoom: ', this.zoom)
+      scaleImage(this.original.img, {width: this.templateWidth, height: this.templateHeight}, {width: this.templateWidth, height: this.templateHeight})
         .then((resizedImage) => {
           this.resizedImg = resizedImage
           this.getNaturalSize(resizedImage)
@@ -183,7 +184,7 @@ export default {
     },
     zoomIn () {
       this.zoom *= 1.1
-      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
+      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom}, {width: this.templateWidth, height: this.templateHeight})
           .then((resizedImage) => {
             this.resizedImg = resizedImage
           })
@@ -193,7 +194,7 @@ export default {
     },
     zoomOut() {
       this.zoom /= 1.1
-      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
+      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom}, {width: this.templateWidth, height: this.templateHeight})
           .then((resizedImage) => {
             this.resizedImg = resizedImage
           })
@@ -222,11 +223,15 @@ export default {
       this.original.img = null
       this.resized.img = null
     },
-    async getNaturalSize(image) {
-      const img = new Image()
-      img.src = image
-      await new Promise((resolve) => resolve(image.onload))
-      return {width: img.naturalWidth, height: img.naturalHeight}
+    getNaturalSize(image) {
+      return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => {
+          resolve({width: img.naturalWidth, height: img.naturalHeight})
+        }
+        img.onerror = reject
+        img.src = image
+      })
     },
     download () {
       const a = document.createElement("a"); //Create <a>
