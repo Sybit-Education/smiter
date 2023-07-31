@@ -7,42 +7,69 @@
  * @returns {Promise<Blob | null>} Promise resolving to a scale image or a null if provided an invalid file type
  */
 export default async function scaleImage(imageContent, dimensions) {
-  // ensure the file is an image
-  if (!imageContent.match(/image.*/)) {
-    throw "No Image content!"
-  }
+    // ensure the file is an image
+    if (!imageContent.match(/image.*/)) {
+        throw "No Image content!"
+    }
 
-  let data = ""
+    let data = ""
     await loadImage(imageContent).then(async image => {
-      const canvas = document.createElement("canvas")
-      canvas.width = dimensions.width
-      canvas.height = dimensions.height
-      const context = canvas.getContext("2d", {alpha: true})
+        let canvas = document.createElement("canvas")
+        canvas.width = image.width
+        canvas.height = image.height
+        const context = canvas.getContext("2d", {alpha: true})
 
-      if (image.height <= image.width) {
-        const scaleProportions = canvas.height / image.height
-        const scaledWidth = scaleProportions * image.width
-        context.drawImage(image, (canvas.width - scaledWidth)/2, 0, scaledWidth, canvas.height)
-      } else {
-        const scaleProportions = canvas.width / image.width
-        const scaledHeight = scaleProportions * image.height
-        context.drawImage(image, 0, (canvas.height - scaledHeight)/2, canvas.width, scaledHeight)
-      }
-      data = canvas.toDataURL('image/png', 1)
+
+        context.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+        while (canvas.width * 0.5 > dimensions.width) {
+            console.log('canvas: ', canvas.width)
+            console.log('dimension: ', dimensions.width)
+            canvas = resize(canvas, canvas.width / 2, canvas.height / 2)
+        }
+        console.log('final canvas: ', canvas.width)
+
+        if (image.height <= image.width) {
+            const scaleProportions = dimensions.height / image.height
+            const scaledWidth = scaleProportions * image.width
+            canvas = resize(canvas, scaledWidth, dimensions.height)
+        } else {
+            const scaleProportions = dimensions.width / image.width
+            const scaledHeight = scaleProportions * image.height
+            canvas = resize(canvas, dimensions.width, scaledHeight)
+        }
+        data = canvas.toDataURL('image/png')
     })
+    // console.log('DATA: ', data)
+    return data
+}
+
+function resize(img, width, height) {
+    const canvas = newCanvas(width, height);
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
+
+    return canvas;
+}
 
 
-  // console.log('DATA: ', data)
-  return data
+function newCanvas(width, height) {
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+
+    return canvas;
 }
 
 function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    // console.log('IMAGE: ', image)
-    image.onload = () => resolve(image);
-    image.onerror = reject;
-    image.src = src;
-  })
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        // console.log('IMAGE: ', image)
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = src;
+    })
 }
 
