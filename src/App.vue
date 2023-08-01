@@ -166,7 +166,6 @@ export default {
       } else {
         this.zoom = this.templateHeight / this.original.height
       }
-      console.log('zoom: ', this.zoom)
       scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
         .then((resizedImage) => {
           this.resizedImg = resizedImage

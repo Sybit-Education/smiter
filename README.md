@@ -3,6 +3,7 @@
 - https://www.npmjs.com/package/merge-images
 - https://www.raymondcamden.com/2019/06/13/reading-image-sizes-and-dimensions-with-vuejs
 - https://stackoverflow.com/questions/53708278/how-to-resize-the-image-in-vue
+- https://morioh.com/a/872a8ce21d61/simple-image-resizing-in-the-browser
 
 ## Project setup
 
