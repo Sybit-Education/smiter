@@ -14,7 +14,7 @@
     "core-js": "^3.32.0",
     "merge-images": "^2.0.0",
     "register-service-worker": "^1.7.2",
-    "sass": "^1.64.2",
+    "sass": "^1.65.1",
     "sass-loader": "^13.2.0",
     "vue": "^3.3.4",
     "vue-panzoom": "^1.1.6"
