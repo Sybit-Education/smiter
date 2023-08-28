@@ -10,7 +10,7 @@
   "dependencies": {
     "@mdi/font": "7.2.96",
     "airtable": "^0.12.1",
-    "ant-design-vue": "^3.2.10",
+    "ant-design-vue": "^4.0.1",
     "core-js": "^3.32.0",
     "merge-images": "^2.0.0",
     "register-service-worker": "^1.7.2",
