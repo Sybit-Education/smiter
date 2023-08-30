@@ -5,69 +5,80 @@
       <h1>SMITER - Social Media Image Templater</h1>
     </a-layout-header>
 
-    <a-layout-content>
-      <template-selector @selected="templateChanged"/>
+    <a-layout-content class="background">
+      <a-tabs id="tabs" v-model:activeKey="activeKey" size="large" class="tab-container"
+              type="card"
+              :tabBarStyle="{margin: '0 0 0 0'}"
+      >
+        <a-tab-pane id="tab" key="1" tab="Templates" class="tab-style">
+          <template-selector @selected="templateChanged"/>
 
-      <div class="center">
-        <a-upload
-          ref="uploadInput"
-          v-if="templateImg"
-          id="img"
-          name="img"
-          accept="image/*"
-          :show-upload-list="false"
-          :maxCount="1"
-          :before-upload="readImg"
-          @remove="removeImg"
-        >
-          <a-button
-            type="primary"
-            size="large"
-            class="upload-button"
-          >
-            <upload-outlined />
-            Dein Foto auswählen
-          </a-button>
-        </a-upload>
-
-
-      </div>
-      <img ref="photo"/>
-      <div v-if="resizedImg">
-
-        <img
-          class="result"
-          ref="result"
-          @mousemove="move"
-          crossorigin="anonymous"
-        />
-        <a-row class="center">
-          <a-col cols="12">
-            <manipulation-control
-              @moveLeft="moveLeft"
-              @moveRight="moveRight"
-              @moveUp="moveUp"
-              @moveDown="moveDown"
-              @zoomIn="zoomIn"
-              @zoomOut="zoomOut"
-            />
-          </a-col>
-          <a-col cols="12">
-            <a-button
-              @click="download"
-              type="primary"
-              size="large"
+          <div class="center">
+            <a-upload
+                ref="uploadInput"
+                v-if="templateImg"
+                id="img"
+                name="img"
+                accept="image/*"
+                :show-upload-list="false"
+                :maxCount="1"
+                :before-upload="readImg"
+                @remove="removeImg"
             >
-              <download-outlined />
-              Download
-            </a-button>
-          </a-col>
+              <a-button
+                  type="primary"
+                  size="large"
+                  class="upload-button"
+              >
+                <upload-outlined/>
+                Dein Foto auswählen
+              </a-button>
+            </a-upload>
 
-        </a-row>
-      </div>
+
+          </div>
+          <img ref="photo"/>
+          <div v-if="resizedImg">
+
+            <img
+                class="result"
+                ref="result"
+                @mousemove="move"
+                crossorigin="anonymous"
+            />
+            <a-row class="center">
+              <a-col cols="12">
+                <manipulation-control
+                    @moveLeft="moveLeft"
+                    @moveRight="moveRight"
+                    @moveUp="moveUp"
+                    @moveDown="moveDown"
+                    @zoomIn="zoomIn"
+                    @zoomOut="zoomOut"
+                />
+              </a-col>
+              <a-col cols="12">
+                <a-button
+                    @click="download"
+                    type="primary"
+                    size="large"
+                >
+                  <download-outlined/>
+                  Download
+                </a-button>
+              </a-col>
+
+            </a-row>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="vCard" force-render>
+          <QRCode/>
+        </a-tab-pane>
+      </a-tabs>
+
     </a-layout-content>
 
-    <a-layout-footer>
+    <a-layout-footer class="background">
       <footer-bar />
     </a-layout-footer>
   </a-layout>
@@ -77,15 +88,25 @@
 <script>
 import mergeImages from 'merge-images'
 import scaleImage from '@/plugins/image-resizer'
-import { UploadOutlined, DownloadOutlined } from '@ant-design/icons-vue'
-import { message } from 'ant-design-vue'
+import {UploadOutlined, DownloadOutlined} from '@ant-design/icons-vue'
+import {message} from 'ant-design-vue'
 import ManipulationControl from '@/components/ManipulationControl'
 import TemplateSelector from '@/components/TemplateSelector.vue'
 import FooterBar from '@/components/FooterBar.vue'
+import {ref} from 'vue';
+import QRCode from '@/components/QRCode.vue'
 
 export default {
   name: 'App',
-  data () {
+  setup() {
+    return {
+      activeKey: ref('1'),
+      selectedKeys: ref(['1']),
+      collapsed: ref(false),
+      gutter: window.screen.width / 2
+    };
+  },
+  data() {
     return {
       x: 0,
       y: 0,
@@ -97,19 +118,19 @@ export default {
         height: 0
       },
       resizedImg: null,
-      resizedWidth:0,
+      resizedWidth: 0,
       resizedHeight: 0,
       templateImg: null,
       templateWidth: 0,
-      templateHeight:0,
-      handleChange: null
+      templateHeight: 0,
+      handleChange: null,
     }
   },
   components: {
     ManipulationControl, UploadOutlined, DownloadOutlined, TemplateSelector,
-    FooterBar
+    FooterBar, QRCode
   },
-  created () {
+  created() {
     this.handleChange = (info) => {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
@@ -122,66 +143,66 @@ export default {
     };
   },
   methods: {
-    merge () {
-      if(this.resizedImg) {
+    merge() {
+      if (this.resizedImg) {
         const toMerge = [
           {src: this.resizedImg, x: this.x, y: this.y},
           {src: this.templateImg, x: 0, y: 0},
         ]
         mergeImages(toMerge, {
-            width: this.templateWidth,
-            height: this.templateHeight,
-            crossOrigin: "Anonymous"
-          })
-          .then(b64 => {
-            this.$refs['result'].src = b64
-          })
-          .catch((err) => {
-            message.error(err.message)
-          })
+          width: this.templateWidth,
+          height: this.templateHeight,
+          crossOrigin: "Anonymous"
+        })
+            .then(b64 => {
+              this.$refs['result'].src = b64
+            })
+            .catch((err) => {
+              message.error(err.message)
+            })
       }
     },
-    moveUp () {
+    moveUp() {
       this.y = this.y - this.factor
     },
-    moveDown () {
+    moveDown() {
       this.y = this.y + this.factor
     },
-    moveLeft () {
+    moveLeft() {
       this.x = this.x - this.factor
     },
-    moveRight () {
+    moveRight() {
       this.x = this.x + this.factor
     },
     move(evt) {
-      if (evt.buttons > 0 &&  evt.movementX > 0 &&  evt.movement > 0) {
+      if (evt.buttons > 0 && evt.movementX > 0 && evt.movement > 0) {
         this.x += evt.movementX
         this.y += evt.movementY
         console.log('move: x:', this.x, 'y:', this.y)
       }
     },
-    async zoomFit () {
+    async zoomFit() {
       if (this.original.width >= this.original.height) {
         this.zoom = this.templateWidth / this.original.width
       } else {
         this.zoom = this.templateHeight / this.original.height
       }
       scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
-        .then((resizedImage) => {
-          this.resizedImg = resizedImage
-          this.getNaturalSize(resizedImage)
-            .then(size => {
-              this.resizedWidth = size.width
-              this.resizedHeight = size.height
-            })
-          this.$refs['photo'].src = this.resizedImg
-          return this.resizedImg
-        })
-        .catch((err) => {
-          message.error(err.message)
-        })
+          .then((resizedImage) => {
+            this.resizedImg = resizedImage
+            this.getNaturalSize(resizedImage)
+                .then(size => {
+                  this.resizedWidth = size.width
+                  this.resizedHeight = size.height
+                })
+            this.$refs['photo'].src = this.resizedImg
+            return this.resizedImg
+          })
+          .catch((err) => {
+            message.error(err.message)
+          })
     },
-    zoomIn () {
+    zoomIn() {
       this.zoom *= 1.1
       scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
           .then((resizedImage) => {
@@ -193,7 +214,7 @@ export default {
     },
     zoomOut() {
       this.zoom /= 1.1
-      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom} )
+      scaleImage(this.original.img, {width: this.original.width * this.zoom, height: this.original.height * this.zoom})
           .then((resizedImage) => {
             this.resizedImg = resizedImage
           })
@@ -209,7 +230,7 @@ export default {
       }
       reader.onload = () => {
         this.original.img = reader.result
-        this.getNaturalSize(this.original.img).then(size =>{
+        this.getNaturalSize(this.original.img).then(size => {
           this.original.width = size.width
           this.original.height = size.height
           this.zoomFit()
@@ -218,7 +239,7 @@ export default {
       reader.readAsDataURL(evt)
       return false // prevent upload action
     },
-    removeImg () {
+    removeImg() {
       this.original.img = null
       this.resized.img = null
     },
@@ -232,7 +253,7 @@ export default {
         img.src = image
       })
     },
-    download () {
+    download() {
       const a = document.createElement("a"); //Create <a>
       a.href = this.$refs['result'].src //Image Base64 Goes here
       a.download = "smiter.png"; //File name Here
@@ -247,17 +268,17 @@ export default {
   },
   watch: {
     x(newX, oldX) {
-      if(this.resizedImg && newX !== oldX) {
+      if (this.resizedImg && newX !== oldX) {
         this.merge()
       }
     },
     y(newY, oldY) {
-      if(this.resizedImg && newY !== oldY) {
+      if (this.resizedImg && newY !== oldY) {
         this.merge()
       }
     },
     resizedImg(newImg, oldImg) {
-      if(newImg != null && newImg !== oldImg) {
+      if (newImg != null && newImg !== oldImg) {
         this.merge()
       }
     },
@@ -275,26 +296,36 @@ export default {
         this.templateHeight = 0
       }
     }
-  }
+  },
 }
 </script>
 
 <style scoped>
+
+@import '@/assets/css/custom.css';
 h1 {
   color: whitesmoke;
 }
+
 .ant-layout-content {
   min-height: calc(100vh - 9rem);
 }
+
+.tab-style {
+  background: whitesmoke;
+}
+
 .center {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 100px;
 }
+
 .upload-button {
   margin: 0.5rem;
-
 }
+
 .result {
   width: 100vw;
   border-width: 1px;
@@ -302,4 +333,9 @@ h1 {
   border-style: solid;
   background: url('@/assets/img/transparent.jpg') repeat;
 }
+
+.background {
+  background: #f5f5f5;
+}
+
 </style>
