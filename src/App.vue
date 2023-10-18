@@ -37,7 +37,7 @@
 
 
           </div>
-          <img ref="photo"/>
+          <!-- img ref="photo"/ -->
           <div v-if="resizedImg">
 
             <img
