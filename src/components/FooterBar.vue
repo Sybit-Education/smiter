@@ -2,7 +2,7 @@
   <div>
     <div>Developed with 💜 for you!</div>
     <a-space>
-      <span>&copy; 2022 Sybit GmbH</span> |
+      <span>&copy; {{ year }} Sybit GmbH</span> |
       <a href="https://www.sybit.de/impressum">Impressum</a> |
       <a href="https://www.sybit.de/datenschutz">Datenschutz</a>
     </a-space>
@@ -11,7 +11,12 @@
 
 <script>
 export default {
-  name: 'FooterBar'
+  name: 'FooterBar',
+  computed: {
+    year() {
+      return new Date().getFullYear()
+    }
+  },
 }
 </script>
 
