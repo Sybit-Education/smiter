@@ -9,27 +9,27 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
-    "@mdi/font": "7.1.96",
+    "@mdi/font": "7.2.96",
     "airtable": "^0.12.1",
-    "ant-design-vue": "^3.2.10",
-    "core-js": "^3.28.0",
+    "ant-design-vue": "^4.0.4",
+    "core-js": "^3.33.0",
     "merge-images": "^2.0.0",
     "qrcode": "^1.5.3",
     "register-service-worker": "^1.7.2",
     "sass": "^1.63.6",
-    "sass-loader": "^13.2.0",
+    "sass-loader": "^13.3.2",
     "vue": "^3.3.4",
     "vue-panzoom": "^1.1.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3",
-    "@babel/eslint-parser": "^7.19.1",
+    "@babel/core": "^7.22.9",
+    "@babel/eslint-parser": "^7.22.15",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "eslint": "^8.34.0",
-    "eslint-plugin-vue": "^9.9.0"
+    "eslint": "^8.51.0",
+    "eslint-plugin-vue": "^9.16.1"
   },
   "eslintConfig": {
     "root": true,
