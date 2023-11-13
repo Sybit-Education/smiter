@@ -97,7 +97,7 @@
 </template>
 
 <script>
-const QRCode = require('qrcode')
+import QRCode from 'qrcode'
 import { DownloadOutlined, EditOutlined } from '@ant-design/icons-vue'
 
 export default {
