@@ -5,7 +5,7 @@
       <h1>SMITER - Social Media Image Templater</h1>
     </a-layout-header>
 
-    <a-layout-content class="background">
+    <a-layout-content>
       <a-tabs id="tabs" v-model:activeKey="activeKey" size="large" tab-position="bottom"
               type="card"
               :tabBarStyle="{margin: '0 0 0 0'}"
@@ -57,31 +57,5 @@ h1 {
   min-height: calc(100vh - 9rem);
 }
 
-.tab-style {
-  background: whitesmoke;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 100px;
-}
-
-.upload-button {
-  margin: 0.5rem;
-}
-
-.result {
-  width: 100vw;
-  border-width: 1px;
-  border-color: gray;
-  border-style: solid;
-  background: url('@/assets/img/transparent.jpg') repeat;
-}
-
-.background {
-  background: #f5f5f5;
-}
 
 </style>

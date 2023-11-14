@@ -1,5 +1,5 @@
 <template>
-  <template-selector @selected="templateChanged" />
+  <template-selector v-if="!resizedImg" @selected="templateChanged" />
 
   <div class="center">
     <a-upload
@@ -15,15 +15,14 @@
     >
       <a-button type="primary" size="large" class="upload-button">
         <upload-outlined />
-        Dein Foto auswählen
+        Foto auswählen &hellip;
       </a-button>
     </a-upload>
   </div>
-  <!-- img ref="photo"/ -->
   <div v-if="resizedImg">
     <img class="result" ref="result" @mousemove="move" crossorigin="anonymous" />
     <a-row class="center">
-      <a-col cols="12">
+      <a-col :span="12">
         <manipulation-control
           @moveLeft="moveLeft"
           @moveRight="moveRight"
@@ -33,10 +32,13 @@
           @zoomOut="zoomOut"
         />
       </a-col>
-      <a-col cols="12">
+      <a-col :span="12">
         <a-button @click="download" type="primary" size="large">
           <download-outlined />
           Download
+        </a-button>
+        <a-button @click="reset" type="default" size="large">
+          Zurücksetzen
         </a-button>
       </a-col>
     </a-row>
@@ -144,11 +146,12 @@ export default {
           this.getNaturalSize(resizedImage).then((size) => {
             this.resizedWidth = size.width
             this.resizedHeight = size.height
+            this.x = (this.templateWidth - this.resizedWidth) / 2
           })
-          this.$refs['photo'].src = this.resizedImg
           return this.resizedImg
         })
         .catch((err) => {
+          console.error(err);
           message.error(err.message)
         })
     },
@@ -196,8 +199,12 @@ export default {
       return false // prevent upload action
     },
     removeImg() {
-      this.original.img = null
-      this.resized.img = null
+      if(this.original && this.original.img) {
+        this.original.img = null
+      }
+      if(this.resized && this.resized.img) {
+        this.resized.img = null
+      }
     },
     getNaturalSize(image) {
       return new Promise((resolve, reject) => {
@@ -220,6 +227,22 @@ export default {
       this.$nextTick(() => {
         document.getElementById('img').removeAttribute('capture') //TODO tweak
       })
+    },
+    reset () {
+      this.removeImg()
+      this.resitedImg = null;
+      this.templateImg = null;
+      this.templateWidth = 0;
+      this.templateHeight = 0;
+      this.x = 0;
+      this.y = 0;
+      this.zoom = 1.0;
+      this.factor = 100;
+      this.original = {
+        img: null,
+        width: 0,
+        height: 0
+      };
     }
   },
   watch: {
@@ -254,3 +277,25 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px;
+}
+
+.upload-button {
+  margin: 0.5rem;
+}
+
+.result {
+  width: 100vw;
+  border-width: 1px;
+  border-color: gray;
+  border-style: solid;
+  background: url('@/assets/img/transparent.jpg') repeat;
+}
+</style>
