@@ -1,7 +1,7 @@
 import Airtable from 'airtable'
 
 export const api = new Airtable({
-  apiKey: `${process.env.VUE_APP_AIRTABLE_API_KEY}`
-}).base(`${process.env.VUE_APP_AIRTABLE_BASE}`)
+  apiKey: `${import.meta.env.VITE_APP_AIRTABLE_API_KEY}`
+}).base(`${import.meta.env.VITE_APP_AIRTABLE_BASE}`)
 
 export default api

@@ -1,0 +1,35 @@
+/*
+Css to make tabs use whole width found on: https://stackoverflow.com/questions/73301262/how-to-style-antd-tabs-component
+ */
+.ant-tabs-nav-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: #616164;
+    color: #a0a0a1;
+}
+
+.ant-tabs-tab {
+    width: 50%;
+    justify-content: center;
+    background: #616164 !important;
+    border: #616164 !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active{
+    background: #d0d0d5 !important;
+    font-weight: 500;
+}
+
+.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #505050 !important;
+}
+
+.ant-tabs-tab:hover {
+    color: #d0d0d5 !important;
+}
+
+.ant-tabs-nav-more {
+    display: none;
+}
