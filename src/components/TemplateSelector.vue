@@ -2,12 +2,14 @@
   <a-row class="template-selector">
     <a-col
       v-for="item in templateList"
+      :lg="6"
       :md="8"
+      :sm="12"
       :xs="12"
       :key="item.id"
     >
       <a-card
-        class="template-item"
+        :class="itemStyle(item)"
         hoverable
         @click="selected(item)"
       >
@@ -35,7 +37,8 @@ export default {
   name: 'TemplateSelector',
   data () {
     return {
-      templateList: []
+      templateList: [],
+      selectedItem: null
     }
   },
   async mounted () {
@@ -43,7 +46,15 @@ export default {
   },
   methods: {
     selected(item) {
+      this.selectedItem = item
        this.$emit('selected', item)
+    },
+    itemStyle (item) {
+      if (this.selectedItem === item) {
+        return 'template-item selected'
+      } else {
+        return 'template-item'
+      }
     }
   }
 }
@@ -52,6 +63,10 @@ export default {
 <style scoped>
 .template-item {
   margin: 0.25rem;
+}
+.selected {
+  border-color: #1677ff;
+  border-width: 3px;
 }
 .template-preview {
   background: url('@/assets/img/transparent.jpg') repeat;

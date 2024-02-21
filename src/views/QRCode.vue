@@ -2,6 +2,7 @@
   <a-layout id="v-card">
     <a-layout-content v-if="!generated">
       <a-form
+        class="v-card-form"
         :model="formData"
         name="cardValues"
         @submit="generateQrCode()"
@@ -202,6 +203,9 @@ export default {
 </script>
 
 <style scoped>
+.v-card-form {
+  margin: 0.5rem;
+}
 .a-input-style {
   border-radius: 10px;
   height: 2.5rem;
