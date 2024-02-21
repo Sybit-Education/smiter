@@ -14,7 +14,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "@mdi/font": "^7.3.67",
     "airtable": "^0.12.2",
-    "ant-design-vue": "^4.0.7",
+    "ant-design-vue": "^4.1.2",
     "merge-images": "^2.0.0",
     "qrcode": "^1.5.3",
     "sass": "^1.66.1",
