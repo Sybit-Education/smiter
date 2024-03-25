@@ -3,8 +3,8 @@
     <a-space direction="vertical">
       <div>Developed with 💜 for you!</div>
       <div>&copy; {{ year }} Sybit GmbH</div>
-      <div><a href="https://www.sybit.de/impressum">Impressum</a> </div>
-      <div><a href="https://www.sybit.de/datenschutz">Datenschutz</a></div>
+      <div><a href="https://www.sybit.de/impressum" target="_blank">Impressum</a> </div>
+      <div><a href="https://www.sybit.de/datenschutz" target="_blank">Datenschutz</a></div>
     </a-space>
   </div>
 </template>
