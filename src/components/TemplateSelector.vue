@@ -45,6 +45,9 @@ export default {
     this.templateList = await templateService.getList()
   },
   methods: {
+    resetSelection () {
+      this.selectedItem = null
+    },
     selected(item) {
       this.selectedItem = item
        this.$emit('selected', item)
@@ -66,7 +69,7 @@ export default {
 }
 .selected {
   border-color: #1677ff;
-  border-width: 3px;
+  border-width: 4px;
 }
 .template-preview {
   background: url('@/assets/img/transparent.jpg') repeat;
