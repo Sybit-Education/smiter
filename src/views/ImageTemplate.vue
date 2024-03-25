@@ -1,24 +1,6 @@
 <template>
-  <template-selector v-if="!resizedImg" @selected="templateChanged" />
+  <template-selector ref="templateSelector" v-if="!resizedImg" @selected="templateChanged" />
 
-  <div class="center">
-    <a-upload
-      ref="uploadInput"
-      v-if="templateImg"
-      id="img"
-      name="img"
-      accept="image/*"
-      :show-upload-list="false"
-      :maxCount="1"
-      :before-upload="readImg"
-      @remove="removeImg"
-    >
-      <a-button type="primary" size="large" class="upload-button">
-        <upload-outlined />
-        Foto auswählen &hellip;
-      </a-button>
-    </a-upload>
-  </div>
   <div v-if="resizedImg">
     <img class="result" ref="result" @mousemove="move" crossorigin="anonymous" />
     <a-row class="center">
@@ -32,22 +14,38 @@
           @zoomOut="zoomOut"
         />
       </a-col>
-      <a-col :span="12">
-        <a-button @click="download" type="primary" size="large">
+    </a-row>
+  </div>
+    <a-space class="action-bar">
+        <a-upload
+          ref="uploadInput"
+          v-if="templateImg"
+          id="img"
+          name="img"
+          accept="image/*"
+          :show-upload-list="false"
+          :maxCount="1"
+          :before-upload="readImg"
+          @remove="removeImg"
+        >
+          <a-button v-if="showCameraButton" type="primary" size="large">
+            <CameraOutlined />
+            Foto auswählen &hellip;
+          </a-button>
+        </a-upload>
+        <a-button v-if="showDownloadButton" @click="download" type="primary" size="large">
           <download-outlined />
           Download
         </a-button>
-        <a-button @click="reset" type="default" size="large">
+        <a-button v-if="showResetButton" @click="reset" type="default" size="large">
           Zurücksetzen
         </a-button>
-      </a-col>
-    </a-row>
-  </div>
+    </a-space>
 </template>
 <script>
 import ManipulationControl from '@/components/ManipulationControl'
 import TemplateSelector from '@/components/TemplateSelector.vue'
-import { UploadOutlined, DownloadOutlined } from '@ant-design/icons-vue'
+import { CameraOutlined, DownloadOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import mergeImages from 'merge-images'
 import scaleImage from '@/plugins/image-resizer'
@@ -56,7 +54,7 @@ export default {
   name: 'ImageTemplate',
   components: {
     ManipulationControl,
-    UploadOutlined,
+    CameraOutlined,
     DownloadOutlined,
     TemplateSelector
   },
@@ -90,6 +88,17 @@ export default {
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} file upload failed.`)
       }
+    }
+  },
+  computed: {
+    showCameraButton() {
+      return (!this.resizedImg)
+    },
+    showDownloadButton() {
+      return (this.resizedImg)
+    },
+    showResetButton() {
+      return (this.original.img || this.resizedImg || this.templateImg)
     }
   },
   methods: {
@@ -202,8 +211,8 @@ export default {
       if(this.original && this.original.img) {
         this.original.img = null
       }
-      if(this.resized && this.resized.img) {
-        this.resized.img = null
+      if(this.resizedImg && this.resizedImg) {
+        this.resizedImg = null
       }
     },
     getNaturalSize(image) {
@@ -230,7 +239,6 @@ export default {
     },
     reset () {
       this.removeImg()
-      this.resitedImg = null;
       this.templateImg = null;
       this.templateWidth = 0;
       this.templateHeight = 0;
@@ -243,6 +251,7 @@ export default {
         width: 0,
         height: 0
       };
+      this.$refs.templateSelector.selectedItem = null;
     }
   },
   watch: {
@@ -284,10 +293,12 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 100px;
 }
 
-.upload-button {
+.action-bar {
+  position: absolute;
+  bottom: 3rem;
+  z-index: 2;
   margin: 0.5rem;
 }
 
