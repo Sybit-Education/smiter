@@ -17,7 +17,7 @@
     "merge-images": "^2.0.0",
     "qrcode": "^1.5.3",
     "register-service-worker": "^1.7.2",
-    "sass": "^1.72.0",
+    "sass": "^1.74.1",
     "sass-loader": "^14.1.1",
     "vue": "^3.4.21",
     "vue-panzoom": "^1.1.6"
