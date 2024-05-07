@@ -2,7 +2,9 @@
   <a-layout id="v-card">
     <a-layout-content v-if="!generated">
       <a-form
+        class="v-card-form"
         :model="formData"
+        layout="horizontal"
         name="cardValues"
         @submit="generateQrCode()"
         :label-col="{ span: 4 }"
@@ -10,23 +12,25 @@
       >
       <a-form-item
           label="Titel"
+          name="title"
         >
           <a-input type="text" v-model:value="formData.title"  />
         </a-form-item>
         <a-form-item
           label="Vorname"
+          name="first-name"
           label-for="first-name"
           :rules="[{ required: true, message: 'Bitte Vornamen eintragen' }]"
         >
           <a-input id="first-name" type="text" v-model:value="formData.firstName" placeholder="Vorname" />
         </a-form-item>
-        <a-form-item label="Nachname" :rules="[{ required: true, message: 'Bitte nachnamen eintragen' }]">
+        <a-form-item label="Nachname" name="last-name" :rules="[{ required: true, message: 'Bitte nachnamen eintragen' }]">
           <a-input type="text" v-model:value="formData.lastName" id="last-name" />
         </a-form-item>
-        <a-form-item label="E-Mail" :rules="[{ required: true, message: 'Bitte E-Mai. eintragen!' }]">
+        <a-form-item label="E-Mail" name="e-mail" :rules="[{ required: true, message: 'Bitte E-Mai. eintragen!' }]">
           <a-input type="email" v-model:value="formData.email" />
         </a-form-item>
-        <a-form-item label="Telefon">
+        <a-form-item label="Telefon" name="telephone">
           <a-input type="tel" v-model:value="formData.phone" />
         </a-form-item>
         <a-form-item label="Firma">
@@ -74,7 +78,7 @@
       <div class="centered">
         <img id="screen" :src="url" />
       </div>
-      <a-float-button-group shape="circle">
+      <a-float-button-group shape="circle" >
         <a-float-button
           type="default"
           @click="backToForm"
@@ -84,7 +88,7 @@
           </template>
         </a-float-button>
         <a-float-button
-          type="primary"
+          type="default"
           @click="download"
         >
           <template #icon>
@@ -202,17 +206,9 @@ export default {
 </script>
 
 <style scoped>
-.a-input-style {
-  border-radius: 10px;
-  height: 2.5rem;
-  width: 100%;
-  align-self: center;
-  display: flex;
-  border-color: darkgrey;
-  font-size: medium;
-  color: dimgrey;
+.v-card-form {
+  margin: 2rem;
 }
-
 .button-style-div {
   padding-top: 4rem;
   padding-bottom: 2rem;
@@ -227,6 +223,8 @@ export default {
   font-weight: bold;
   border: none;
   border-radius: 0.7rem;
+  box-shadow: 0px 8px 15px rgba(0,0,0,0.3);
+
 }
 
 .download-button-style {
@@ -238,6 +236,7 @@ export default {
   border: none;
   border-radius: 0.7rem;
   margin-right: 2rem;
+  box-shadow: 0px 8px 15px rgba(0,0,0,0.3);
 }
 
 .back-button-style {
@@ -249,6 +248,7 @@ export default {
   border: none;
   border-radius: 0.7rem;
   margin-left: 2rem;
+  box-shadow: 0px 8px 15px rgba(0,0,0,0.3);
 }
 
 .centered {
