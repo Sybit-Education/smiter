@@ -21,7 +21,7 @@
     "register-service-worker": "^1.7.2",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
-    "vue": "^3.4.25",
+    "vue": "^3.4.27",
     "vue-panzoom": "^1.1.6"
   },
   "devDependencies": {
