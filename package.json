@@ -33,7 +33,7 @@
     "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.26.0",
+    "eslint-plugin-vue": "^9.27.0",
     "vite": "^5.3.3",
     "vite-plugin-pwa": "^0.20.0"
   }
